@@ -5,5 +5,8 @@ describe("CSUF Homepage 1", () => {
     });
 
     
-    
+    it('Visit CSUF homepage', () => {
+        cy.visit('https://www.fullerton.edu/');
+      });
+  
   });  
