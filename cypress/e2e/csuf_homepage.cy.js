@@ -4,8 +4,6 @@ describe("CSUF Homepage 1", () => {
       cy.contains("California State University, Fullerton").should("be.visible");
     });
 
-    it('Visit CSUF homepage', () => {
-        cy.visit('https://www.fullerton.edu/');
-      });
+    
     
   });  

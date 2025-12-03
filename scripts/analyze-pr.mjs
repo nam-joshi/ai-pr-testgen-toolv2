@@ -32,7 +32,7 @@ ${pr.files.map((f) => `File: ${f.filename}\nPatch:\n${f.patch}`).join("\n")}
 
 async function analyze() {
   if (!fs.existsSync(DATA_FILE)) {
-    console.error("❌ Run get-pr-files.mjs first.");
+    console.error("Run get-pr-files.mjs first.");
     return;
   }
 
@@ -79,7 +79,7 @@ async function analyze() {
       console.log("AI Suggestions:");
       suggestions.forEach((s) => console.log("- " + s));
     } catch (err) {
-      console.log("❌ OpenAI failed, fallback suggestions used.");
+      console.log("OpenAI failed, fallback suggestions used.");
       output.push({
         pr_number: pr.pr_number,
         title: pr.title,

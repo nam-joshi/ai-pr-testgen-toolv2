@@ -54,7 +54,7 @@ async function fetchPRs() {
 
     console.log("✔ PR data saved to data/pr-files.json");
   } catch (err) {
-    console.error("❌ Error fetching PRs:", err);
+    console.error("Error fetching PRs:", err);
   }
 }
 
