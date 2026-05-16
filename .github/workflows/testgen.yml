@@ -20,12 +20,13 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Load GitHub Secrets into Environment
+    - name: Set environment variables
       run: |
         echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=${{ secrets.PAT_TOKEN }}" >> $GITHUB_ENV
-        echo "GITHUB_OWNER=${{ secrets.REPO_OWNER }}" >> $GITHUB_ENV
-        echo "GITHUB_REPO=${{ secrets.REPO_NAME }}" >> $GITHUB_ENV
+        echo "GITHUB_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+        echo "GITHUB_REPO=${{ github.event.repository.name }}" >> $GITHUB_ENV
+        echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
     - name: Fetch PR Files
       run: npm run get-pr
@@ -34,35 +35,4 @@ jobs:
       run: npm run analyze-pr
 
     - name: Post PR Comment with Results
-      run: |
-        node << 'EOF'
-        const fs = require('fs');
-        const path = require('path');
-        const { Octokit } = require('@octokit/rest');
-
-        const token = process.env.GITHUB_TOKEN;
-        const owner = process.env.GITHUB_OWNER;
-        const repo = process.env.GITHUB_REPO;
-        const prNumber = process.env.GITHUB_REF.split("/")[2];
-
-        const data = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "pr-ai-suggestions.json")));
-
-        const octokit = new Octokit({ auth: token });
-
-        let body = "### 🤖 AI TestGen Suggestions\n\n";
-
-        data.forEach(item => {
-          body += `#### PR #${item.pr_number}: ${item.title}\n`;
-          body += "**Generated Test Cases:**\n";
-          body += "```\n";
-          body += JSON.stringify(item.suggestions, null, 2);
-          body += "\n```\n\n";
-        });
-
-        octokit.issues.createComment({
-          owner,
-          repo,
-          issue_number: prNumber,
-          body
-        });
-        EOF
+      run: npm run post-comment
