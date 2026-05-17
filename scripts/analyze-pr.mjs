@@ -21,7 +21,7 @@ Analyze the following Cypress test code changes and generate:
 - 3 negative tests
 - 3 edge-case tests
 
-Return JSON array only.
+Return a raw JSON array only. No markdown, no code fences, no explanation.
 
 PR Title: ${pr.title}
 
@@ -58,6 +58,8 @@ async function analyze() {
       });
 
       let raw = result.choices[0].message.content.trim();
+      // Strip markdown code fences if present
+      raw = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
       let suggestions;
 
       try {
