@@ -27,6 +27,24 @@ describe("Amazon Search Functionality", () => {
   });
 });
 
+describe("Amazon Cart Behaviour", () => {
+  beforeEach(() => {
+    cy.visit("https://www.amazon.com/");
+  });
+
+  it("should show cart count on fresh visit", () => {
+    cy.get("#nav-cart-count").then(($el) => {
+      const count = parseInt($el.text().trim());
+      expect(count).to.be.gte(0);
+    });
+  });
+
+  it("should load the cart page without errors", () => {
+    cy.visit("https://www.amazon.com/gp/cart/view.html");
+    cy.get("body").should("be.visible");
+    cy.url().should("include", "cart");
+  });
+});
 
 
 
