@@ -16,6 +16,17 @@ describe("Amazon Homepage", () => {
   });
 });
 
+describe("Amazon Search Functionality", () => {
+  beforeEach(() => {
+    cy.visit("https://www.amazon.com/");
+  });
+  it("should return results for a valid product search", () => {
+    cy.get("#twotabsearchtextbox").type("laptop");
+    cy.get("#nav-search-submit-button").click();
+    cy.get("[data-component-type='s-search-result']").should("have.length.greaterThan", 0);
+  });
+});
+
 
 
 
